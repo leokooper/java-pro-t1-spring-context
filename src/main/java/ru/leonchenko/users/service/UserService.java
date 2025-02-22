@@ -1,37 +1,57 @@
 package ru.leonchenko.users.service;
 
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.leonchenko.users.entity.User;
-import ru.leonchenko.users.repository.UserDao;
+import ru.leonchenko.users.repository.UserRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService {
-    private final UserDao userDao;
 
-    public UserService(UserDao userDao) {
-        this.userDao = userDao;
-    }
+    private final UserRepository userRepository;
 
+    @Transactional(readOnly = false)
     public void createUser(String username) {
-        userDao.createUser(username);
+        if (userRepository.existsByUsername(username)) {
+            log.info("Пользователь с именем {} уже существует", username);
+            return;
+        }
+
+        var user = new User();
+        user.setUsername(username);
+        userRepository.save(user);
     }
 
-    public Optional<User> getUserById(Long id) {
-        return userDao.getUserById(id);
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Пользователь c id " + id + " не найден.")
+        );
     }
 
     public List<User> getAllUsers() {
-        return userDao.getAllUsers();
+        return userRepository.findAll();
     }
 
+    @Transactional(readOnly = false)
     public void updateUser(Long id, String newUsername) {
-        userDao.updateUser(id, newUsername);
+        var user = getUserById(id);
+        user.setUsername(newUsername);
+        userRepository.save(user);
     }
 
+    @Transactional(readOnly = false)
     public void deleteUser(Long id) {
-        userDao.deleteUser(id);
+        val user = getUserById(id);
+        userRepository.delete(user);
     }
 }
