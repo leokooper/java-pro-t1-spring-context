@@ -1,5 +1,6 @@
-jdbc:
-  url: jdbc:postgresql://localhost:5433/user
-  username: postgres
-  password: postgres
-  max-pool-size: 10
+spring:
+  main:
+    banner-mode: off
+  config:
+    import:
+      - classpath:/configs/database-config.yml
