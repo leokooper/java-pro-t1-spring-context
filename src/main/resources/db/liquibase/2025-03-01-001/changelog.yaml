@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2025-03-01-001
+      author: Leonchenko Igor
+      changes:
+        - sqlFile:
+            dbms: postgresql
+            endDelimiter: \nGO
+            path: db/liquibase/2025-03-01-001/sql/01-tables.sql
