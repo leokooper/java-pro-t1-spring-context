@@ -1,0 +1,12 @@
+server:
+  servlet:
+    context-path: /bank-products
+  port: 8080
+
+spring:
+  main:
+    banner-mode: off
+  config:
+    import:
+      - classpath:/configs/database-config.yml
+      - classpath:/configs/client-config.yml
