@@ -1,0 +1,11 @@
+server:
+  servlet:
+    context-path: /payment-core
+  port: 8081
+
+spring:
+  main:
+    banner-mode: off
+  config:
+    import:
+      - classpath:/configs/client-config.yml

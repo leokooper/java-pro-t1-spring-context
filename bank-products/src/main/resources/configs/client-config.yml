@@ -1,0 +1,6 @@
+client:
+  base-url:
+    payment-core: http://localhost:8081/payment-core
+  timeout:
+    connection: 3s
+    read: 3s
